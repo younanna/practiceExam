@@ -1,6 +1,12 @@
 Practice Exam
 =============
 
+This practice exam asks you to do several code wrangling tasks that we
+have done in class so far.
+
+Clone this repo into Rstudio and fill in the necessary code. Then,
+commit and push to github. Finally, turn in a link to canvas.
+
     ## ── Attaching packages ──────────────────────────────────── tidyverse 1.3.0 ──
 
     ## ✓ ggplot2 3.2.1     ✓ purrr   0.3.3

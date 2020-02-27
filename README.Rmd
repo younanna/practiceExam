@@ -7,6 +7,12 @@ output: md_document
 
 # Practice Exam
 
+This practice exam asks you to do several code wrangling tasks that we have done in class so far. 
+
+Clone this repo into Rstudio and fill in the necessary code.  Then, commit and push to github.  Finally, turn in a link to canvas. 
+
+
+
 ```{r echo = F}
 library(tidyverse)
 library(nycflights13)
