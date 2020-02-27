@@ -11,6 +11,8 @@ This practice exam asks you to do several code wrangling tasks that we have done
 
 Clone this repo into Rstudio and fill in the necessary code.  Then, commit and push to github.  Finally, turn in a link to canvas. 
 
+- lm(performance ~ origin + ... + dest)
+- ignore "max_wind_gust"
 
 
 ```{r echo = F}
@@ -48,5 +50,6 @@ Construct a linear model to predict the performance of each (airport,day) using 
 ```
 
 Repeat the above, but only for EWR.  Obviously, exclude the fixed effect for each airport.
+-> fixed effect? 
 ```{r}
 ```
