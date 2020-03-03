@@ -24,7 +24,7 @@ library(lubridate)
 ```
 
 
-Make a plot with three facets, one for each airport in the weather data.  The x-axis should be the day of the year (1:365) and the y-axis should be the mean temperature recorded on that day, at that airport.
+## 1. Make a plot with three facets, one for each airport in the weather data.  The x-axis should be the day of the year (1:365) and the y-axis should be the mean temperature recorded on that day, at that airport.
 ```{r}
 # check practice.R 
 
@@ -59,11 +59,31 @@ weather %>% mutate(day_of_year = yday(time_hour)) %>% group_by(origin, day_of_ye
 
 ```
 
+# facet_wrap
 
-Make a non-tidy matrix of that data where each row is an airport and each column is a day of the year.  
+```{r Q1_answer}
+
+weatherQ1 <- weather %>% mutate(day_of_year = yday(time_hour)) %>% group_by(origin, day_of_year) %>% summarize(meanTemp = mean(temp, na.rm = T))
+
+# str(weatherQ1)
+
+ggplot(data = weatherQ1) + geom_point(mapping = aes(x= day_of_year, y = meanTemp, color = origin)) + facet_wrap(~origin)
+
+```
+
+
+## 2. Make a non-tidy matrix of that data where each row is an airport and each column is a day of the year.  
 -> each element = average temperature
 -> some function with '_' tidy
 ```{r}
+
+# Check organizing.R
+
+# row = airport
+# col = day of the year
+
+weatherQ1 %>% pivot_wider(names_from = day_of_year, values_from = meanTemp)
+
 
 ```
 
