@@ -12,7 +12,7 @@ commit and push to github. Finally, turn in a link to canvas.
 
 <!-- -->
 
-    ## -- Attaching packages ----------------------------------------------- tidyverse 1.3.0 --
+    ## -- Attaching packages ---------------------------------------------------------------- tidyverse 1.3.0 --
 
     ## v ggplot2 3.2.1     v purrr   0.3.3
     ## v tibble  2.1.3     v dplyr   0.8.3
@@ -23,7 +23,7 @@ commit and push to github. Finally, turn in a link to canvas.
 
     ## Warning: package 'readr' was built under R version 3.6.2
 
-    ## -- Conflicts -------------------------------------------------- tidyverse_conflicts() --
+    ## -- Conflicts ------------------------------------------------------------------- tidyverse_conflicts() --
     ## x dplyr::filter() masks stats::filter()
     ## x dplyr::lag()    masks stats::lag()
 
@@ -186,12 +186,99 @@ tidy
     ## #   SJU <dbl>, SLC <dbl>, SMF <dbl>, SNA <dbl>, SRQ <dbl>, STL <dbl>,
     ## #   STT <dbl>, SYR <dbl>, TPA <dbl>, TUL <dbl>, TVC <dbl>, TYS <dbl>, XNA <dbl>
 
+    ## day = 1:365
+
+    ##############looks weird !! ##########
+
+    perfDataDay <- flights %>% mutate(day_of_year = yday(time_hour)) %>% group_by(dest, day_of_year) %>% summarise(count = n(), noDelay = length(dep_delay[dep_delay < 1]), performance = noDelay / count)
+      
+    perfDataDay %>% select(dest, day_of_year, performance) %>% 
+      pivot_wider(names_from = dest, values_from = performance)
+
+    ## # A tibble: 365 x 106
+    ##    day_of_year   ABQ   ACK   ALB   ANC   ATL   AUS   AVL   BDL   BGR   BHM   BNA
+    ##          <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
+    ##  1         112     0    NA  NA      NA 0.537 0.286    NA   0       0     0 0.278
+    ##  2         113     1    NA  NA      NA 0.566 0.667    NA   0       0     0 0.444
+    ##  3         114     0    NA  NA      NA 0.623 0.429    NA   0.5     1     1 0.556
+    ##  4         115     1    NA  NA      NA 0.585 0.429    NA   0       0     1 0.333
+    ##  5         116     1    NA  NA      NA 0.509 0.143    NA   0.5     0     1 0.389
+    ##  6         117     1    NA  NA      NA 0.711 0.8      NA   0.5     0    NA 0.929
+    ##  7         118     1    NA  NA      NA 0.583 0.667     1   0.5     1     0 0.875
+    ##  8         119     1    NA  NA      NA 0.630 0.714    NA   0.5     1     1 0.667
+    ##  9         120     1    NA  NA      NA 0.830 0.857    NA   0.5     0     1 0.722
+    ## 10         121     1    NA   0.5    NA 0.863 0.714     1   0.5     1     0 0.842
+    ## # ... with 355 more rows, and 94 more variables: BOS <dbl>, BQN <dbl>,
+    ## #   BTV <dbl>, BUF <dbl>, BUR <dbl>, BWI <dbl>, BZN <dbl>, CAE <dbl>,
+    ## #   CAK <dbl>, CHO <dbl>, CHS <dbl>, CLE <dbl>, CLT <dbl>, CMH <dbl>,
+    ## #   CRW <dbl>, CVG <dbl>, DAY <dbl>, DCA <dbl>, DEN <dbl>, DFW <dbl>,
+    ## #   DSM <dbl>, DTW <dbl>, EGE <dbl>, EYW <dbl>, FLL <dbl>, GRR <dbl>,
+    ## #   GSO <dbl>, GSP <dbl>, HDN <dbl>, HNL <dbl>, HOU <dbl>, IAD <dbl>,
+    ## #   IAH <dbl>, ILM <dbl>, IND <dbl>, JAC <dbl>, JAX <dbl>, LAS <dbl>,
+    ## #   LAX <dbl>, LEX <dbl>, LGA <dbl>, LGB <dbl>, MCI <dbl>, MCO <dbl>,
+    ## #   MDW <dbl>, MEM <dbl>, MHT <dbl>, MIA <dbl>, MKE <dbl>, MSN <dbl>,
+    ## #   MSP <dbl>, MSY <dbl>, MTJ <dbl>, MVY <dbl>, MYR <dbl>, OAK <dbl>,
+    ## #   OKC <dbl>, OMA <dbl>, ORD <dbl>, ORF <dbl>, PBI <dbl>, PDX <dbl>,
+    ## #   PHL <dbl>, PHX <dbl>, PIT <dbl>, PSE <dbl>, PSP <dbl>, PVD <dbl>,
+    ## #   PWM <dbl>, RDU <dbl>, RIC <dbl>, ROC <dbl>, RSW <dbl>, SAN <dbl>,
+    ## #   SAT <dbl>, SAV <dbl>, SBN <dbl>, SDF <dbl>, SEA <dbl>, SFO <dbl>,
+    ## #   SJC <dbl>, SJU <dbl>, SLC <dbl>, SMF <dbl>, SNA <dbl>, SRQ <dbl>,
+    ## #   STL <dbl>, STT <dbl>, SYR <dbl>, TPA <dbl>, TUL <dbl>, TVC <dbl>,
+    ## #   TYS <dbl>, XNA <dbl>
+
 4. Construct a tidy data set to that give weather summaries for each (airport, day). Use the total precipitation, minimum visibility, maximum wind\_gust, and average wind\_speed.
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-Construct a linear model to predict the performance of each
-(airport,day) using the weather summaries and a "fixed effect" for each
-airport. Display the summaries.
+    # data = weather
+    # total precipitation = sum(precip)
+    # minimum visibility = min(visib)
+    # IGNORE : maximum wind_gust = max(wind_gust)
+    # average wind_speed = mean(wind_speed)
 
-Repeat the above, but only for EWR. Obviously, exclude the fixed effect
-for each airport. -&gt; fixed effect?
+    ## day = 1:31
+    # weather %>% group_by(origin, day) %>% summarise(totalPrecip = sum(precip),minVisib = min(visib), avgWind_speed = mean(wind_speed))
+
+    ## day = 1:365
+    Q4.data <- weather %>% mutate(day_of_year = yday(time_hour)) %>% group_by(origin, day_of_year) %>% 
+      summarise(totalPrecip = sum(precip), minVisib = min(visib), avgWind_speed = mean(wind_speed))
+
+    #############tidy data set???################  
+    Q4.data 
+
+    ## # A tibble: 1,092 x 5
+    ## # Groups:   origin [3]
+    ##    origin day_of_year totalPrecip minVisib avgWind_speed
+    ##    <chr>        <dbl>       <dbl>    <dbl>         <dbl>
+    ##  1 EWR              1           0       10         13.2 
+    ##  2 EWR              2           0       10         10.9 
+    ##  3 EWR              3           0       10          8.58
+    ##  4 EWR              4           0       10         14.0 
+    ##  5 EWR              5           0       10          9.40
+    ##  6 EWR              6           0        6          9.11
+    ##  7 EWR              7           0       10          7.34
+    ##  8 EWR              8           0        8          7.19
+    ##  9 EWR              9           0        6          5.99
+    ## 10 EWR             10           0       10          8.92
+    ## # ... with 1,082 more rows
+
+5. Construct a linear model to predict the performance of each (airport,day) using the weather summaries and a "fixed effect" for each airport. Display the summaries.
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+    ## data = weather
+    # (airport, day)
+    # weather summaries
+    # fixed effect of each airport
+
+    # create weather summaries
+
+
+    #Q5.model <- lm(performance ~ temp + dewp + humid + wind_dir, data = weather)
+    #summary(Q5.model)
+
+
+    ##################fixed effect??#######################
+
+6. Repeat the above, but only for EWR. Obviously, exclude the fixed effect for each airport.
+--------------------------------------------------------------------------------------------
+
+-&gt; fixed effect?
