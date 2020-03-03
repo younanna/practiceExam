@@ -148,83 +148,42 @@ tidy
     # dep_delay = departure delays in minutes
     ## dep_delay < 1
 
-    perfData <- flights %>% group_by(dest, day) %>% summarise(count = n(), noDelay = length(dep_delay[dep_delay < 1]), performance = noDelay / count)
+    # perfData <- flights %>% group_by(origin, day) %>% summarise(count = n(), noDelay = length(dep_delay[dep_delay < 1]), performance = noDelay / count)
+    # 
+    # # each (airport, day)
+    # # airport's performance = flights departed late < 1 hour
+    # 
+    # perfData %>% select(origin, day, performance) %>% 
+    #   pivot_wider(names_from = origin, values_from = performance)
 
-    # each (airport, day)
-    # airport's performance = flights departed late < 1 hour
-
-    perfData %>% select(dest, day, performance) %>% 
-      pivot_wider(names_from = dest, values_from = performance)
-
-    ## # A tibble: 31 x 106
-    ##      day   ABQ   ACK   ALB   ANC   ATL   AUS   AVL   BDL   BGR   BHM   BNA   BOS
-    ##    <int> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
-    ##  1     1 0.75  0.75  0.333    NA 0.700 0.549 0.667 0.538 0.182 0.444 0.635 0.708
-    ##  2     2 0.375 0.5   0.2      NA 0.678 0.5   0.7   0.5   0.692 0.778 0.650 0.708
-    ##  3     3 0.375 0.333 0.533     1 0.629 0.605 0.778 0.636 0.364 0.636 0.570 0.712
-    ##  4     4 0.625 0.625 0.5      NA 0.748 0.659 0.889 0.727 0.667 0.556 0.675 0.786
-    ##  5     5 0.5   0.571 0.667    NA 0.695 0.747 0.889 0.875 0.7   0.875 0.716 0.742
-    ##  6     6 0.75  0.8   0.471     0 0.654 0.558 0.778 0.667 0.833 0.7   0.638 0.762
-    ##  7     7 0.375 0.625 0.5      NA 0.625 0.582 0.875 0.75  0.364 0.4   0.616 0.690
-    ##  8     8 0.25  0.875 0.5      NA 0.619 0.566 0.444 0.615 0.667 0.8   0.569 0.666
-    ##  9     9 0.375 1     0.583    NA 0.595 0.590 0.7   0.692 0.583 0.625 0.613 0.665
-    ## 10    10 0.375 0.75  0.588     1 0.614 0.506 0.889 0.714 0.385 0.364 0.565 0.642
-    ## # ... with 21 more rows, and 93 more variables: BQN <dbl>, BTV <dbl>,
-    ## #   BUF <dbl>, BUR <dbl>, BWI <dbl>, BZN <dbl>, CAE <dbl>, CAK <dbl>,
-    ## #   CHO <dbl>, CHS <dbl>, CLE <dbl>, CLT <dbl>, CMH <dbl>, CRW <dbl>,
-    ## #   CVG <dbl>, DAY <dbl>, DCA <dbl>, DEN <dbl>, DFW <dbl>, DSM <dbl>,
-    ## #   DTW <dbl>, EGE <dbl>, EYW <dbl>, FLL <dbl>, GRR <dbl>, GSO <dbl>,
-    ## #   GSP <dbl>, HDN <dbl>, HNL <dbl>, HOU <dbl>, IAD <dbl>, IAH <dbl>,
-    ## #   ILM <dbl>, IND <dbl>, JAC <dbl>, JAX <dbl>, LAS <dbl>, LAX <dbl>,
-    ## #   LEX <dbl>, LGA <dbl>, LGB <dbl>, MCI <dbl>, MCO <dbl>, MDW <dbl>,
-    ## #   MEM <dbl>, MHT <dbl>, MIA <dbl>, MKE <dbl>, MSN <dbl>, MSP <dbl>,
-    ## #   MSY <dbl>, MTJ <dbl>, MVY <dbl>, MYR <dbl>, OAK <dbl>, OKC <dbl>,
-    ## #   OMA <dbl>, ORD <dbl>, ORF <dbl>, PBI <dbl>, PDX <dbl>, PHL <dbl>,
-    ## #   PHX <dbl>, PIT <dbl>, PSE <dbl>, PSP <dbl>, PVD <dbl>, PWM <dbl>,
-    ## #   RDU <dbl>, RIC <dbl>, ROC <dbl>, RSW <dbl>, SAN <dbl>, SAT <dbl>,
-    ## #   SAV <dbl>, SBN <dbl>, SDF <dbl>, SEA <dbl>, SFO <dbl>, SJC <dbl>,
-    ## #   SJU <dbl>, SLC <dbl>, SMF <dbl>, SNA <dbl>, SRQ <dbl>, STL <dbl>,
-    ## #   STT <dbl>, SYR <dbl>, TPA <dbl>, TUL <dbl>, TVC <dbl>, TYS <dbl>, XNA <dbl>
 
     ## day = 1:365
 
     ##############looks weird !! ##########
 
-    perfDataDay <- flights %>% mutate(day_of_year = yday(time_hour)) %>% group_by(dest, day_of_year) %>% summarise(count = n(), noDelay = length(dep_delay[dep_delay < 1]), performance = noDelay / count)
+    perfDataDay <- flights %>% mutate(day_of_year = yday(time_hour)) %>% group_by(origin, day_of_year) %>% summarise(count = n(), noDelay = length(dep_delay[dep_delay < 1]), performance = noDelay / count)
       
-    perfDataDay %>% select(dest, day_of_year, performance) %>% 
-      pivot_wider(names_from = dest, values_from = performance)
+    Q3.data <- perfDataDay %>% select(origin, day_of_year, performance)
 
-    ## # A tibble: 365 x 106
-    ##    day_of_year   ABQ   ACK   ALB   ANC   ATL   AUS   AVL   BDL   BGR   BHM   BNA
-    ##          <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
-    ##  1         112     0    NA  NA      NA 0.537 0.286    NA   0       0     0 0.278
-    ##  2         113     1    NA  NA      NA 0.566 0.667    NA   0       0     0 0.444
-    ##  3         114     0    NA  NA      NA 0.623 0.429    NA   0.5     1     1 0.556
-    ##  4         115     1    NA  NA      NA 0.585 0.429    NA   0       0     1 0.333
-    ##  5         116     1    NA  NA      NA 0.509 0.143    NA   0.5     0     1 0.389
-    ##  6         117     1    NA  NA      NA 0.711 0.8      NA   0.5     0    NA 0.929
-    ##  7         118     1    NA  NA      NA 0.583 0.667     1   0.5     1     0 0.875
-    ##  8         119     1    NA  NA      NA 0.630 0.714    NA   0.5     1     1 0.667
-    ##  9         120     1    NA  NA      NA 0.830 0.857    NA   0.5     0     1 0.722
-    ## 10         121     1    NA   0.5    NA 0.863 0.714     1   0.5     1     0 0.842
-    ## # ... with 355 more rows, and 94 more variables: BOS <dbl>, BQN <dbl>,
-    ## #   BTV <dbl>, BUF <dbl>, BUR <dbl>, BWI <dbl>, BZN <dbl>, CAE <dbl>,
-    ## #   CAK <dbl>, CHO <dbl>, CHS <dbl>, CLE <dbl>, CLT <dbl>, CMH <dbl>,
-    ## #   CRW <dbl>, CVG <dbl>, DAY <dbl>, DCA <dbl>, DEN <dbl>, DFW <dbl>,
-    ## #   DSM <dbl>, DTW <dbl>, EGE <dbl>, EYW <dbl>, FLL <dbl>, GRR <dbl>,
-    ## #   GSO <dbl>, GSP <dbl>, HDN <dbl>, HNL <dbl>, HOU <dbl>, IAD <dbl>,
-    ## #   IAH <dbl>, ILM <dbl>, IND <dbl>, JAC <dbl>, JAX <dbl>, LAS <dbl>,
-    ## #   LAX <dbl>, LEX <dbl>, LGA <dbl>, LGB <dbl>, MCI <dbl>, MCO <dbl>,
-    ## #   MDW <dbl>, MEM <dbl>, MHT <dbl>, MIA <dbl>, MKE <dbl>, MSN <dbl>,
-    ## #   MSP <dbl>, MSY <dbl>, MTJ <dbl>, MVY <dbl>, MYR <dbl>, OAK <dbl>,
-    ## #   OKC <dbl>, OMA <dbl>, ORD <dbl>, ORF <dbl>, PBI <dbl>, PDX <dbl>,
-    ## #   PHL <dbl>, PHX <dbl>, PIT <dbl>, PSE <dbl>, PSP <dbl>, PVD <dbl>,
-    ## #   PWM <dbl>, RDU <dbl>, RIC <dbl>, ROC <dbl>, RSW <dbl>, SAN <dbl>,
-    ## #   SAT <dbl>, SAV <dbl>, SBN <dbl>, SDF <dbl>, SEA <dbl>, SFO <dbl>,
-    ## #   SJC <dbl>, SJU <dbl>, SLC <dbl>, SMF <dbl>, SNA <dbl>, SRQ <dbl>,
-    ## #   STL <dbl>, STT <dbl>, SYR <dbl>, TPA <dbl>, TUL <dbl>, TVC <dbl>,
-    ## #   TYS <dbl>, XNA <dbl>
+    performanceData <- perfDataDay %>% select(origin, day_of_year, performance) %>% 
+      pivot_wider(names_from = origin, values_from = performance)
+
+    performanceData
+
+    ## # A tibble: 365 x 4
+    ##    day_of_year   EWR   JFK   LGA
+    ##          <dbl> <dbl> <dbl> <dbl>
+    ##  1           1 0.439 0.613 0.725
+    ##  2           2 0.34  0.629 0.632
+    ##  3           3 0.5   0.550 0.608
+    ##  4           4 0.519 0.557 0.663
+    ##  5           5 0.618 0.553 0.767
+    ##  6           6 0.425 0.612 0.723
+    ##  7           7 0.576 0.691 0.803
+    ##  8           8 0.665 0.705 0.830
+    ##  9           9 0.711 0.733 0.885
+    ## 10          10 0.733 0.801 0.865
+    ## # ... with 355 more rows
 
 4. Construct a tidy data set to that give weather summaries for each (airport, day). Use the total precipitation, minimum visibility, maximum wind\_gust, and average wind\_speed.
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -270,15 +229,45 @@ tidy
     # fixed effect of each airport
 
     # create weather summaries
+    ## left join
+    ## check playgrounds.R
+    Q5.data <- Q4.data %>% left_join(Q3.data, by = c("origin", "day_of_year"))
 
+    Q5.model <- lm(performance ~ totalPrecip + minVisib + avgWind_speed, data = Q5.data)
+    summary(Q5.model)
 
-    #Q5.model <- lm(performance ~ temp + dewp + humid + wind_dir, data = weather)
-    #summary(Q5.model)
+    ## 
+    ## Call:
+    ## lm(formula = performance ~ totalPrecip + minVisib + avgWind_speed, 
+    ##     data = Q5.data)
+    ## 
+    ## Residuals:
+    ##      Min       1Q   Median       3Q      Max 
+    ## -0.47738 -0.08557  0.01145  0.09218  0.33579 
+    ## 
+    ## Coefficients:
+    ##                 Estimate Std. Error t value Pr(>|t|)    
+    ## (Intercept)    0.5574162  0.0139147  40.060  < 2e-16 ***
+    ## totalPrecip   -0.0708862  0.0137043  -5.173 2.75e-07 ***
+    ## minVisib       0.0118105  0.0012305   9.598  < 2e-16 ***
+    ## avgWind_speed -0.0011987  0.0008941  -1.341     0.18    
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## Residual standard error: 0.1231 on 1084 degrees of freedom
+    ##   (4 observations deleted due to missingness)
+    ## Multiple R-squared:  0.1704, Adjusted R-squared:  0.1681 
+    ## F-statistic: 74.22 on 3 and 1084 DF,  p-value: < 2.2e-16
 
-
+    ################### include day & origin??? ###########
     ##################fixed effect??#######################
 
 6. Repeat the above, but only for EWR. Obviously, exclude the fixed effect for each airport.
 --------------------------------------------------------------------------------------------
 
 -&gt; fixed effect?
+
+    Q6.data <- Q5.data %>% filter(origin == "EWR")
+
+    # Q6.model <- lm(performance ~ )
+    #########fixed effect...######################

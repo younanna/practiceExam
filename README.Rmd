@@ -98,25 +98,27 @@ weatherQ1 %>% pivot_wider(names_from = day_of_year, values_from = meanTemp)
 # dep_delay = departure delays in minutes
 ## dep_delay < 1
 
-perfData <- flights %>% group_by(dest, day) %>% summarise(count = n(), noDelay = length(dep_delay[dep_delay < 1]), performance = noDelay / count)
-
-# each (airport, day)
-# airport's performance = flights departed late < 1 hour
-
-perfData %>% select(dest, day, performance) %>% 
-  pivot_wider(names_from = dest, values_from = performance)
+# perfData <- flights %>% group_by(origin, day) %>% summarise(count = n(), noDelay = length(dep_delay[dep_delay < 1]), performance = noDelay / count)
+# 
+# # each (airport, day)
+# # airport's performance = flights departed late < 1 hour
+# 
+# perfData %>% select(origin, day, performance) %>% 
+#   pivot_wider(names_from = origin, values_from = performance)
 
 
 ## day = 1:365
 
 ##############looks weird !! ##########
 
-perfDataDay <- flights %>% mutate(day_of_year = yday(time_hour)) %>% group_by(dest, day_of_year) %>% summarise(count = n(), noDelay = length(dep_delay[dep_delay < 1]), performance = noDelay / count)
+perfDataDay <- flights %>% mutate(day_of_year = yday(time_hour)) %>% group_by(origin, day_of_year) %>% summarise(count = n(), noDelay = length(dep_delay[dep_delay < 1]), performance = noDelay / count)
   
-perfDataDay %>% select(dest, day_of_year, performance) %>% 
-  pivot_wider(names_from = dest, values_from = performance)
+Q3.data <- perfDataDay %>% select(origin, day_of_year, performance)
 
+performanceData <- perfDataDay %>% select(origin, day_of_year, performance) %>% 
+  pivot_wider(names_from = origin, values_from = performance)
 
+performanceData
 
 ```
 
@@ -150,12 +152,13 @@ Q4.data
 # fixed effect of each airport
 
 # create weather summaries
+## left join
+## check playgrounds.R
+Q5.data <- Q4.data %>% left_join(Q3.data, by = c("origin", "day_of_year"))
 
-
-#Q5.model <- lm(performance ~ temp + dewp + humid + wind_dir, data = weather)
-#summary(Q5.model)
-
-
+Q5.model <- lm(performance ~ totalPrecip + minVisib + avgWind_speed, data = Q5.data)
+summary(Q5.model)
+################### include day & origin??? ###########
 ##################fixed effect??#######################
 
 ```
@@ -163,4 +166,9 @@ Q4.data
 ## 6. Repeat the above, but only for EWR.  Obviously, exclude the fixed effect for each airport.
 -> fixed effect? 
 ```{r}
+
+Q6.data <- Q5.data %>% filter(origin == "EWR")
+
+# Q6.model <- lm(performance ~ )
+#########fixed effect...######################
 ```
