@@ -169,6 +169,8 @@ summary(Q5.model)
 
 Q6.data <- Q5.data %>% filter(origin == "EWR")
 
-# Q6.model <- lm(performance ~ )
+Q6.model <- lm(performance ~ totalPrecip + minVisib + avgWind_speed, data = Q6.data)
+summary(Q6.model) 
+
 #########fixed effect...######################
 ```

@@ -12,7 +12,7 @@ commit and push to github. Finally, turn in a link to canvas.
 
 <!-- -->
 
-    ## -- Attaching packages ---------------------------------------------------------------- tidyverse 1.3.0 --
+    ## -- Attaching packages ---------------------------------------------------------------------------------------------------------------------------------------------------------- tidyverse 1.3.0 --
 
     ## v ggplot2 3.2.1     v purrr   0.3.3
     ## v tibble  2.1.3     v dplyr   0.8.3
@@ -23,7 +23,7 @@ commit and push to github. Finally, turn in a link to canvas.
 
     ## Warning: package 'readr' was built under R version 3.6.2
 
-    ## -- Conflicts ------------------------------------------------------------------- tidyverse_conflicts() --
+    ## -- Conflicts ------------------------------------------------------------------------------------------------------------------------------------------------------------- tidyverse_conflicts() --
     ## x dplyr::filter() masks stats::filter()
     ## x dplyr::lag()    masks stats::lag()
 
@@ -269,5 +269,30 @@ tidy
 
     Q6.data <- Q5.data %>% filter(origin == "EWR")
 
-    # Q6.model <- lm(performance ~ )
+    Q6.model <- lm(performance ~ totalPrecip + minVisib + avgWind_speed, data = Q6.data)
+    summary(Q6.model) 
+
+    ## 
+    ## Call:
+    ## lm(formula = performance ~ totalPrecip + minVisib + avgWind_speed, 
+    ##     data = Q6.data)
+    ## 
+    ## Residuals:
+    ##      Min       1Q   Median       3Q      Max 
+    ## -0.40478 -0.07390  0.00198  0.08277  0.34402 
+    ## 
+    ## Coefficients:
+    ##                Estimate Std. Error t value Pr(>|t|)    
+    ## (Intercept)    0.527059   0.021482  24.535  < 2e-16 ***
+    ## totalPrecip   -0.054517   0.021370  -2.551   0.0112 *  
+    ## minVisib       0.010428   0.002126   4.904 1.42e-06 ***
+    ## avgWind_speed -0.003379   0.001426  -2.369   0.0184 *  
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## Residual standard error: 0.1182 on 359 degrees of freedom
+    ##   (1 observation deleted due to missingness)
+    ## Multiple R-squared:  0.1448, Adjusted R-squared:  0.1377 
+    ## F-statistic: 20.26 on 3 and 359 DF,  p-value: 3.737e-12
+
     #########fixed effect...######################
