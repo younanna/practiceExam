@@ -12,7 +12,7 @@ commit and push to github. Finally, turn in a link to canvas.
 
 <!-- -->
 
-    ## -- Attaching packages --------------------------------------------- tidyverse 1.3.0 --
+    ## -- Attaching packages ----------------------------------------------- tidyverse 1.3.0 --
 
     ## v ggplot2 3.2.1     v purrr   0.3.3
     ## v tibble  2.1.3     v dplyr   0.8.3
@@ -23,7 +23,7 @@ commit and push to github. Finally, turn in a link to canvas.
 
     ## Warning: package 'readr' was built under R version 3.6.2
 
-    ## -- Conflicts ------------------------------------------------ tidyverse_conflicts() --
+    ## -- Conflicts -------------------------------------------------- tidyverse_conflicts() --
     ## x dplyr::filter() masks stats::filter()
     ## x dplyr::lag()    masks stats::lag()
 
@@ -137,13 +137,57 @@ tidy
     ## #   `106` <dbl>, `107` <dbl>, `108` <dbl>, `109` <dbl>, `110` <dbl>,
     ## #   `111` <dbl>, `112` <dbl>, ...
 
-For each (airport, day) contruct a tidy data set of the airport's
-"performance" as the proportion of flights that departed less than an
-hour late.
+3. For each (airport, day) contruct a tidy data set of the airport's "performance" as the proportion of flights that departed less than an hour late.
+-----------------------------------------------------------------------------------------------------------------------------------------------------
 
-Construct a tidy data set to that give weather summaries for each
-(airport, day). Use the total precipitation, minimum visibility, maximum
-wind\_gust, and average wind\_speed.
+    # check handling.R & organizing.R
+
+
+    # data
+    ## flights
+    # dep_delay = departure delays in minutes
+    ## dep_delay < 1
+
+    perfData <- flights %>% group_by(dest, day) %>% summarise(count = n(), noDelay = length(dep_delay[dep_delay < 1]), performance = noDelay / count)
+
+    # each (airport, day)
+    # airport's performance = flights departed late < 1 hour
+
+    perfData %>% select(dest, day, performance) %>% 
+      pivot_wider(names_from = dest, values_from = performance)
+
+    ## # A tibble: 31 x 106
+    ##      day   ABQ   ACK   ALB   ANC   ATL   AUS   AVL   BDL   BGR   BHM   BNA   BOS
+    ##    <int> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
+    ##  1     1 0.75  0.75  0.333    NA 0.700 0.549 0.667 0.538 0.182 0.444 0.635 0.708
+    ##  2     2 0.375 0.5   0.2      NA 0.678 0.5   0.7   0.5   0.692 0.778 0.650 0.708
+    ##  3     3 0.375 0.333 0.533     1 0.629 0.605 0.778 0.636 0.364 0.636 0.570 0.712
+    ##  4     4 0.625 0.625 0.5      NA 0.748 0.659 0.889 0.727 0.667 0.556 0.675 0.786
+    ##  5     5 0.5   0.571 0.667    NA 0.695 0.747 0.889 0.875 0.7   0.875 0.716 0.742
+    ##  6     6 0.75  0.8   0.471     0 0.654 0.558 0.778 0.667 0.833 0.7   0.638 0.762
+    ##  7     7 0.375 0.625 0.5      NA 0.625 0.582 0.875 0.75  0.364 0.4   0.616 0.690
+    ##  8     8 0.25  0.875 0.5      NA 0.619 0.566 0.444 0.615 0.667 0.8   0.569 0.666
+    ##  9     9 0.375 1     0.583    NA 0.595 0.590 0.7   0.692 0.583 0.625 0.613 0.665
+    ## 10    10 0.375 0.75  0.588     1 0.614 0.506 0.889 0.714 0.385 0.364 0.565 0.642
+    ## # ... with 21 more rows, and 93 more variables: BQN <dbl>, BTV <dbl>,
+    ## #   BUF <dbl>, BUR <dbl>, BWI <dbl>, BZN <dbl>, CAE <dbl>, CAK <dbl>,
+    ## #   CHO <dbl>, CHS <dbl>, CLE <dbl>, CLT <dbl>, CMH <dbl>, CRW <dbl>,
+    ## #   CVG <dbl>, DAY <dbl>, DCA <dbl>, DEN <dbl>, DFW <dbl>, DSM <dbl>,
+    ## #   DTW <dbl>, EGE <dbl>, EYW <dbl>, FLL <dbl>, GRR <dbl>, GSO <dbl>,
+    ## #   GSP <dbl>, HDN <dbl>, HNL <dbl>, HOU <dbl>, IAD <dbl>, IAH <dbl>,
+    ## #   ILM <dbl>, IND <dbl>, JAC <dbl>, JAX <dbl>, LAS <dbl>, LAX <dbl>,
+    ## #   LEX <dbl>, LGA <dbl>, LGB <dbl>, MCI <dbl>, MCO <dbl>, MDW <dbl>,
+    ## #   MEM <dbl>, MHT <dbl>, MIA <dbl>, MKE <dbl>, MSN <dbl>, MSP <dbl>,
+    ## #   MSY <dbl>, MTJ <dbl>, MVY <dbl>, MYR <dbl>, OAK <dbl>, OKC <dbl>,
+    ## #   OMA <dbl>, ORD <dbl>, ORF <dbl>, PBI <dbl>, PDX <dbl>, PHL <dbl>,
+    ## #   PHX <dbl>, PIT <dbl>, PSE <dbl>, PSP <dbl>, PVD <dbl>, PWM <dbl>,
+    ## #   RDU <dbl>, RIC <dbl>, ROC <dbl>, RSW <dbl>, SAN <dbl>, SAT <dbl>,
+    ## #   SAV <dbl>, SBN <dbl>, SDF <dbl>, SEA <dbl>, SFO <dbl>, SJC <dbl>,
+    ## #   SJU <dbl>, SLC <dbl>, SMF <dbl>, SNA <dbl>, SRQ <dbl>, STL <dbl>,
+    ## #   STT <dbl>, SYR <dbl>, TPA <dbl>, TUL <dbl>, TVC <dbl>, TYS <dbl>, XNA <dbl>
+
+4. Construct a tidy data set to that give weather summaries for each (airport, day). Use the total precipitation, minimum visibility, maximum wind\_gust, and average wind\_speed.
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 Construct a linear model to predict the performance of each
 (airport,day) using the weather summaries and a "fixed effect" for each

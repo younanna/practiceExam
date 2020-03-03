@@ -88,11 +88,28 @@ weatherQ1 %>% pivot_wider(names_from = day_of_year, values_from = meanTemp)
 ```
 
 
-For each (airport, day) contruct a tidy data set of the airport's "performance" as the proportion of flights that departed less than an hour late. 
+## 3. For each (airport, day) contruct a tidy data set of the airport's "performance" as the proportion of flights that departed less than an hour late. 
 ```{r}
+# check handling.R & organizing.R
+
+
+# data
+## flights
+# dep_delay = departure delays in minutes
+## dep_delay < 1
+
+perfData <- flights %>% group_by(dest, day) %>% summarise(count = n(), noDelay = length(dep_delay[dep_delay < 1]), performance = noDelay / count)
+
+# each (airport, day)
+# airport's performance = flights departed late < 1 hour
+
+perfData %>% select(dest, day, performance) %>% 
+  pivot_wider(names_from = dest, values_from = performance)
+  
+
 ```
 
-Construct a tidy data set to that give weather summaries for each (airport, day).  Use the total precipitation, minimum visibility, maximum wind_gust, and average wind_speed.  
+## 4. Construct a tidy data set to that give weather summaries for each (airport, day).  Use the total precipitation, minimum visibility, maximum wind_gust, and average wind_speed.  
 ```{r}
 ```
 
